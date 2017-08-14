@@ -39,8 +39,8 @@ title(main="Power Functions",outer=T)
 
 
 # 4 Rational Functions: f(x)=P(x)/Q(x) where P and Q are polynomials
-x<-seq(-5,5,0.1)
 library(polynom)
+x<-seq(-5,5,0.1)
 p1<-polynomial(c(0,1,-3,0,1))
 p2<-polynomial(c(0,1,0,-25,0,3))
 p3<-polynomial(c(1,0,-1,0,2))
@@ -75,6 +75,61 @@ title(main="Algebraic Functions",outer=T)
 
 
 # 6 Trigonometric Functions: C + A * sin/cos/tan(f(x))
+par(oma=c(0,0,1,0))
+layout(matrix(c(1,1,1,2,3,4,5,5,5),3,3,byrow=T),heights=c(0.45,0.45,0.1))
+days<-seq(0,180,0.1)
+Lt<-function(t){12+2.8*sin((2*pi/365)*(t-80))}
+plot(days,Lt(days),type='l',ylab=capture.output(Lt))
+
+x<-seq(-5,5,0.1)
+plot(x,sin(x),type='l',col='red')
+lines(x,cos(x),col='blue')
+plot(x,sin(x),type='l',col='red')
+lines(x,sinpi(x),col='green')
+
+x<-seq(-pi/2,pi/2,0.1)
+plot(x,asin(x),type='l',col='gold')
+lines(x,sin(x),col='red')
+
+par(mar=c(0,0,0,0))
+plot(1, type = "n", axes=FALSE, xlab="", ylab="")
+legends<-c("sin","cos","sinpi","arcsin")
+colors<-c('red','blue','green','gold')
+legend(x="top",legends,col=colors,lwd=3,horiz=T)
+
+title(main="Trigonometric Functions",outer=T)
+
+
+# 7 Exponential Functions: f(x)=a^x
+library(ggplot2)
+x<-seq(-5,5,0.1)
+#sapply(c(1:4),function(a){rep(a,length(x))}) returns a matrix
+#lapply(c(1:4),function(a){rep(a,length(x))}) returns a list
+#unlist(lapply(c(1:4),function(a){rep(a,length(x))}))
+#rapply(as.list(c(1:4)),function(a){rep(a,length(x))})
+legend<-c('0.3^x','0.5^x','0.7^x','2^x','3^x','4^x')
+group<-unlist(lapply(legend,function(a){rep(a,length(x))}))
+df<-data.frame(x=rep(x,6),y=c(0.3^x,0.5^x,0.7^x,2^x,3^x,4^x),group=group)
+g<-ggplot(df)
+g+geom_line(aes(x=x,y=y,group=group,colour=group)
+)+labs(title="Exponential Functions"
+)+ylim(-0.5,10)
+
+
+# 8 Logarithmic Functions: f(x)=log(a)x
+library(ggplot2)
+x<-seq(0.1,5,0.1)
+legend<-c('log(0.3)x','log(0.5)x','log(0.7)x','log(2)x','log(3)x','log(10)x')
+group<-unlist(lapply(legend,function(a){rep(a,length(x))}))
+df<-data.frame(x=rep(x,6),
+		   y=c(log(x,base=0.3),log(x,base=0.5),log(x,base=0.7),log(x,base=2),log(x,base=3),log(x,base=4)),
+		   group=group)
+g<-ggplot(df)
+g+geom_line(aes(x=x,y=y,group=group,colour=group)
+)+labs(title="Logarithmic Functions"
+)+xlim(-0,5)
+
+
 
 
 
