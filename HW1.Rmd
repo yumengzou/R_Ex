@@ -1,0 +1,112 @@
+---
+title: "MATH439 Linear Statistical Model - HW1"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+Author: Yumeng Zou    
+Student ID: 450801    
+Due Date: Sept 7, 2018    
+ 
+ 
+1. Divorce in USA
+
+```{r}
+library(faraway)
+
+data(divusa)
+summary(divusa)
+```
+
+unemployed is skewed to the right, probably due to the Great Depression. \\
+military is skewed to the right, probably due to WWII. 
+
+```{r}
+sort(divusa$birth)
+```
+
+no missing value detected
+
+```{r}
+hist(divusa$divorce, breaks=15, main="US Divorce rates 1920-1996", xlab="Divorce per 1000 women aged 15 or more")
+```
+
+Divorce rate in the US from 1920 to 1996 exhibits a bimodal distribution. The two modes are 9 and 21.
+
+```{r}
+plot(density(divusa$divorce,na.rm=TRUE), main="US Divorce rates 1920-1996", xlab="Divorce per 1000 women aged 15 or more")
+```
+
+```{r}
+plot(sort(divusa$divorce),pch='.', main="US Divorce rates 1920-1996", ylab="Divorce per 1000 women aged 15 or more")
+```
+
+```{r}
+plot(divorce~unemployed,divusa, main="Divorce rate ~ Unemployment", xlab="Unemployment rate", ylab="Divorce per 1000 women aged 15 or more")
+```
+
+Divorce rate can only be high when unemployment rate is low.    
+When unemployment is high (above 10), divorce rate must be low.   
+ 
+ 
+2. alcohol
+```{r}
+bac <- c(8.2, 6.5, 2.4, 0.5, 9.6, 1.6, 5.5)
+beer <- c(4.2, 3, 1.6, 0.3, 5.2, 0.7, 3.2)
+alc <- data.frame(bac, beer)
+alc
+```
+
+```{r}
+lr <- lm(bac~beer, alc)
+summary(lr)
+```
+
+The linear regression line is $y=-0.024+1.89 \prod x$.
+
+```{r}
+plot(bac~beer, alc, main="Blood Alcohol Level ~ Beer", xlab="Beer (liters)", ylab="Blood Alcohol Level (%/100)")
+abline(lr)
+abline(v=mean(beer), lty=2)
+abline(h=mean(bac), lty=2)
+```
+
+```{r}
+plot(residuals(lr), main="BAC~Beer OLSE Residual Plot", xlab="Beer (liters)")
+abline(h=0, lty=2)
+```
+
+residuals are evenly scattered around 0.     
+The assumption of consistant variation is met.    
+
+
+3. $\hat{y}=8+3x$
+- 32
+- 15
+- $\Delta \hat{y}=15$    
+
+4. PA housing price
+```{r}
+library(MPV)
+data(table.b4)
+
+lr <- lm(y~x1, table.b4)
+summary(lr)
+```
+
+The simple linear regression of housing price on current taxes is $y=13.32+3.32x$.    
+The regression is statistically significant at $\alpha =0.001$.     
+$75.68\%$ variability in selling price is explained by this model.   
+
+5. Proof:
+The least-square regression line fitted to $n$ observations minimizes $\sum^{n}_{i=1}{(y_i-\hat{y})^2}$. Since $(x_{n+1},y_{n+1})$ is on the regression line, $y_{n+1}=\hat{y_{n+1}}$ and therefore $\sum^{n+1}_{i=1}{(y_i-\hat{y})^2} = \sum^{n}_{i=1}{(y_i-\hat{y})^2}$. The regression that minimizes $\sum^{n}_{i=1}{(y_i-\hat{y})^2}$ also minimizes $\sum^{n+1}_{i=1}{(y_i-\hat{y})^2}$.  
+
+
+6. RSS v. SSreg
+(d) RSS for model 1 is less than RSS for model 2, while SSreg for model 1 is
+greater than SSreg for model 2.    
+
+$RSS=\sum{(y_i-\hat{y})^2}$ measures the variation in modelling errors. Data points in model 2 are farther from the regression line than those in model 1, so RSS in model 2 is larger.       
+$SSreg=\sum{(\hat{y_i}-\bar{y})}$ measures the explained variation by the model. Total sum of squares $TSS=\sum{(y_i-\bar{y})^2}=RSS+SSreg$. The regression line in model 1 is steeper than that in model 2, thus SSreg is larger in model 1.  
+
